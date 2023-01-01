@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\Base">
+      <UniqueIdentifier>{d4ef230f-ef8b-4ce6-813c-cd73572cc488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Container">
+      <UniqueIdentifier>{db25b464-47bc-43b7-8495-f118f2cdd7c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Array">
+      <UniqueIdentifier>{a3611edf-2e51-4be3-b5c1-2e905193e48f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\List">
+      <UniqueIdentifier>{6194c77a-7e7e-425d-b3a4-1272561bc768}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Int">
+      <UniqueIdentifier>{6633fcb4-530f-45f1-aafc-864b40bbc8ac}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Base.c">
+      <Filter>Исходные файлы\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Array.c">
+      <Filter>Исходные файлы\Array</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseManualTest.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Container.c">
+      <Filter>Исходные файлы\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="List.c">
+      <Filter>Исходные файлы\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Int.c">
+      <Filter>Исходные файлы\Int</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Base.h">
+      <Filter>Исходные файлы\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Container.h">
+      <Filter>Исходные файлы\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="Array.h">
+      <Filter>Исходные файлы\Array</Filter>
+    </ClInclude>
+    <ClInclude Include="List.h">
+      <Filter>Исходные файлы\List</Filter>
+    </ClInclude>
+    <ClInclude Include="Int.h">
+      <Filter>Исходные файлы\Int</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
