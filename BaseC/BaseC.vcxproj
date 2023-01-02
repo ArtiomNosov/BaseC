@@ -158,6 +158,7 @@
     <ClInclude Include="Container.h" />
     <ClInclude Include="Int.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="Iterator.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="StringAlgorithm.h" />
   </ItemGroup>

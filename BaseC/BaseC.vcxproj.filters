@@ -80,5 +80,8 @@
     <ClInclude Include="Item.h">
       <Filter>Исходные файлы\List</Filter>
     </ClInclude>
+    <ClInclude Include="Iterator.h">
+      <Filter>Исходные файлы\Container</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

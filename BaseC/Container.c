@@ -30,6 +30,16 @@ void initializeMap(Container* container, Map map)
 	container->map = map;
 }
 
+void initializeWhere(Container* container, Where where)
+{
+	container->where = where;
+}
+
+void initializeConcat(Container* container, Concat concat)
+{
+	container->concat = concat;
+}
+
 void freeContainer(Container* container)
 {
 	freeBase((Base*)container);

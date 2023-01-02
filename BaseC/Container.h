@@ -9,6 +9,8 @@ typedef void(*Append)(struct Container*, Base*);
 typedef Base*(*Get)(struct Container*, int);
 typedef void(*Resize)(struct Container*, int);
 typedef void(*Map)(struct Container*, BaseF);
+typedef void (*Where)(struct Container*, int (*) (Base*), BaseF); 
+typedef void (*Concat)(struct Container*, struct Container*);
 
 typedef struct Container {
     Base base;
@@ -18,6 +20,8 @@ typedef struct Container {
     Get get;
     Resize resize;
     Map map;
+    Where where;
+    Concat concat;
 } Container;
 
 void initializeSize(Container* container, int);
@@ -31,6 +35,10 @@ void initializeGet(Container* container, Get get);
 void initializeResize(Container* container, Resize resize);
 
 void initializeMap(Container* container, Map map);
+
+void initializeWhere(Container* container, Where where);
+
+void initializeConcat(Container* container, Concat concat);
 
 void freeContainer(Container* container);
 

@@ -16,7 +16,21 @@ void mapMethodArray(Array* array, BaseF baseF);
 
 void mapFromToArray(Array* array, BaseF baseF, int from, int to);
 
+void whereMethodArray(Array* array, int (*f) (Base*), BaseF baseF);
+
+void concatMethodArray(Array* arrayOne, Array* arrayTwo);
+
+char* toStringMethodArray(Array* array);
+
+char* dumpMethodArray(Array* array);
+
 void freeMethodArray(Array* array);
+
+Array* copyMethodArray(Array* array);
+
+char* toStringMethodArray(Array* array);
+
+char* dumpMethodArray(Array* array);
 
 void freeDataInArray(Array* array);
 
@@ -48,13 +62,18 @@ void initializeArray(Array* array)
     Container* container = (Container*)array;
     Base* base = (Base*)array;
     initializeTypeName(base, TYPE_NAME_ARRAY);
+    initializeFree(base, (Free)freeMethodArray);
+    initializeCopy(base, (Copy)copyMethodArray);
+    initializeToString(base, (ToString)toStringMethodArray);
+    initializeDump(base, (Dump)dumpMethodArray);
     initializeSize(container, 0);
     initializeUpperBound(container, -1);
     initializeAppend(container, (Append)appendMethodArray);
     initializeGet(container, (Get)getMethodArray);
     initializeResize(container, (Resize)resizeMethodArray);
     initializeMap(container, (Map)mapMethodArray);
-    initializeFree(base, (Free)freeMethodArray);
+    initializeWhere(container, (Where)whereMethodArray);
+    initializeConcat(container, (Concat)concatMethodArray);
     initializeRealSize(array, START_SIZE);
 }
 
@@ -62,6 +81,45 @@ void initializeRealSize(Array* array, int realSize)
 {
     array->realSize = realSize;
     array->data = calloc(array->realSize, sizeof(Base*));
+}
+
+void freeMethodArray(Array* array)
+{
+    freeDataInArray(array);
+    free(array->data);
+    freeMethodBase((Base*)array);
+}
+
+Array* copyMethodArray(Array* array)
+{
+    Array* result = callocArray();
+    initializeArray(result);
+    int size = getSizeArray(array);
+    for (int i = 0; i < size; i++) {
+        Base* newBase = copyBase(getMethodArray(array, i));
+        appendMethodArray(result, newBase);
+    }
+    return result;
+}
+
+char* toStringMethodArray(Array* array)
+{
+    return toStringMethodBase((Base*)array);
+}
+
+char* dumpMethodArray(Array* array)
+{
+    int size = getSizeArray(array);
+    char* result = toStringMethodArray(array);
+    for (int i = 0; i < size; i++) {
+        Base* currentValue = array->data[i];
+        char* value = dumpBase(currentValue);
+        char* oldResult = result;
+        result = concatenateStringsWithSeparator(result, value, SEPARATOR);
+        free(oldResult);
+        free(value);
+    }
+    return result;
 }
 
 void appendMethodArray(Array* array, Base* value)
@@ -126,11 +184,23 @@ void mapFromToArray(Array* array, BaseF baseF, int from, int to)
     }
 }
 
-void freeMethodArray(Array* array)
+void whereMethodArray(Array* array, int (*f) (Base*), BaseF baseF)
 {
-    freeDataInArray(array);
-    free(array->data);
-    freeMethodBase((Base*)array);
+    int size = getSizeArray(array);
+    for (int i = 0; i < size; i++) {
+        Base* currentValue = array->data[i];
+        if (f(currentValue) == TRUE)
+            baseF(currentValue);
+    }
+}
+
+void concatMethodArray(Array* arrayOne, Array* arrayTwo)
+{
+    int sizeTwo = getSizeArray(arrayTwo);
+    for (int i = 0; i < sizeTwo; i++) {
+        Base* copyValue = copyBase(arrayTwo->data[i]);
+        appendMethodArray(arrayOne, copyValue);
+    }
 }
 
 void freeDataInArray(Array* array)

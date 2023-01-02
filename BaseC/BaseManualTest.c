@@ -20,23 +20,66 @@ void printInt(Base* base)
 	printf("%d ", ((Int*)base)->data);
 }
 
-void writeLine()
+int greaterThenTwoInt(Base* base)
 {
-	printf("\n");
+	return ((Int*)base)->data > 2;
+}
+
+void writeLine(const char* string)
+{
+	printf("%s\n", string);
 }
 
 int main()
 {
+	// Base
+	Base* base = createBase();
+	char* baseDump = dumpBase(base);
+	printf("%s\n", baseDump);
+	free(baseDump);
+	freeBase(base);
+	// Int
+	Base* integer = (Base*)createInt(0);
+	baseDump = dumpBase(integer);
+	printf("%s\n", baseDump);
+	free(baseDump);
+	freeBase(integer);
+	// Item
+	integer = (Base*)createInt(0);
+	Base* item = (Base*)createItem(integer, NULL);
+	baseDump = dumpBase(item);
+	printf("%s\n", baseDump);
+	free(baseDump);
+	freeBase(item);
+	freeBase(integer);
+	// List
+	Container* list = createContainerList();
+	for (int i = 0; i < SIZE; i++) {
+		Int* newValue = createInt(i);
+		list->append(list, (Base*)newValue);
+	}
+	baseDump = dumpBase((Base*)list);
+	writeLine("Print List with dump:");
+	writeLine(baseDump);
+	writeLine("Print List with map:");
+	list->map(list, printInt);
+	writeLine("");
+	free(baseDump);
+	// Array
 	Container* container = createContainerArray();
 	for (int i = 0; i < SIZE; i++) {
 		Int* newValue = createInt(i);
 		container->append(container, (Base*)newValue);
 	}
-	container->map(container, printTypeWithFormat);
+	writeLine("Print Array with dump:");
+	baseDump = dumpBase((Base*)container);
+	writeLine(baseDump);
+	free(baseDump);
+	writeLine("Print Array with map:");
 	container->map(container, printInt);
-	writeLine();
-	freeContainer(container);
-
+	writeLine("");
+	// Containers and lists
+	writeLine("Containers and lists:");
 	Container* containers = createContainerArray();
 	for (int i = 0; i < SIZE; i++) {
 		Base* newContainer = (Base*) createContainerArray();
@@ -45,7 +88,7 @@ int main()
 	containers->map(containers, printTypeWithFormat);
 	printf("Container type is ");
 	printType((Base*)containers);
-	writeLine();
+	writeLine("");
 	freeContainer(containers);
 
 	Container* lists = createContainerList();
@@ -56,18 +99,18 @@ int main()
 	lists->map(lists, printTypeWithFormat);
 	printf("Container type is ");
 	printType((Base*)lists);
-	writeLine();
-	freeContainer(lists);
-
-	Container* list = createContainerList();
-	for (int i = 0; i < SIZE; i++) {
-		Int* newValue = createInt(i);
-		list->append(list, (Base*)newValue);
-	}
-	list->map(list, printTypeWithFormat);
-	list->map(list, printInt);
-	writeLine();
+	writeLine("");
+	// concat List
+	list->concat(list, lists);
+	baseDump = dumpBase((Base*)list);
+	writeLine("concatMethodList:");
+	writeLine(baseDump);
+	free(baseDump);
 	freeContainer(list);
-	// Add a comment
+	freeContainer(lists);
+	// where Array
+	writeLine("whereMethodArray:");
+	container->where(container, greaterThenTwoInt, printTypeWithFormat);
+	freeContainer(container);
 	return 0;
 }		

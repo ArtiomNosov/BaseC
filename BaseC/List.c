@@ -1,5 +1,13 @@
 #include "List.h"
 
+void freeMethodList(List* list);
+
+List* copyMethodList(List* list);
+
+char* toStringMethodList(List* list);
+
+char* dumpMethodList(List* list);
+
 void appendMethodList(List* list, Base* data);
 
 void pushBack(List* list, Base* data);
@@ -10,7 +18,9 @@ void resizeMethodList(List* list, int newSize);
 
 void mapMethodList(List* list, BaseF baseF);
 
-void freeMethodList(List* list);
+void whereMethodList(List* list, int (*f) (Base*), BaseF baseF);
+
+void concatMethodList(List* listOne, List* listTwo);
 
 int sizeList(List* list);
 
@@ -35,18 +45,56 @@ void freeList(List* list)
     freeBase((Base*)list);
 }
 
+List* copyMethodList(List* list)
+{
+    List* newList = callocList();
+    initializeList(newList);
+    Item* ptr = list->head;
+    while (ptr) {
+        Base* data = ptr->data;
+        appendMethodList(newList, copyBase(data));
+        ptr = ptr->next;
+    }
+    return newList;
+}
+
+char* toStringMethodList(List* list)
+{
+    return toStringMethodBase((Base*)list);
+}
+
+char* dumpMethodList(List* list)
+{
+    char* result = toStringMethodList(list);
+    Item* ptr = list->head;
+    while (ptr) {
+        char* itemDump = dumpBase(ptr);
+        char* oldResult = result;
+        result = concatenateStringsWithSeparator(result, itemDump, SEPARATOR);
+        free(oldResult);
+        free(itemDump);
+        ptr = ptr->next;
+    }
+    return result;
+}
+
 void initializeList(List* list)
 {
     Container* container = (Container*)list;
     Base* base = (Base*)list;
     initializeTypeName(base, TYPE_NAME_LIST);
     initializeFree(base, (Free)freeMethodList);
+    initializeCopy(base, (Copy)copyMethodList);
+    initializeToString(base, (ToString)toStringMethodList);
+    initializeDump(base, (Dump)dumpMethodList);
     initializeSize(container, 0);
     initializeUpperBound(container, -1);
     initializeAppend(container, (Append)appendMethodList);
     initializeGet(container, (Get)getMethodList);
     initializeResize(container, (Resize)resizeMethodList);
     initializeMap(container, (Map)mapMethodList);
+    initializeWhere(container, (Where)whereMethodList);
+    initializeConcat(container, (Concat)concatMethodList);
 }
 
 void appendMethodList(List* list, Base* data)
@@ -55,10 +103,8 @@ void appendMethodList(List* list, Base* data)
 }
 
 void pushBack(List* list, Base* data) {
-    Item* mewItem = createItem();
+    Item* mewItem = createItem(data, NULL);
 
-    mewItem->data = data;
-    mewItem->next = NULL;
     if (!list->head) {
         list->head = mewItem;
         list->tail = mewItem;
@@ -101,6 +147,26 @@ void mapMethodList(List* list, BaseF baseF)
     Item* ptr = list->head;
     while (ptr) {
         baseF(ptr->data);
+        ptr = ptr->next;
+    }
+}
+
+void whereMethodList(List* list, int (*f) (Base*), BaseF baseF)
+{
+    Item* ptr = list->head;
+    while (ptr) {
+        Base* currentData = ptr->data;
+        if (f(currentData) == TRUE)
+            baseF(currentData);
+        ptr = ptr->next;
+    }
+}
+void concatMethodList(List* listOne, List* listTwo)
+{
+    Item* ptr = listTwo->head;
+    while (ptr) {
+        Base* copyValue = copyBase(ptr->data);
+        appendMethodList(listOne, copyValue);
         ptr = ptr->next;
     }
 }

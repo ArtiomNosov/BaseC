@@ -11,7 +11,7 @@ typedef struct Item {
     struct Item* next;
 } Item;
 
-Item* createItem();
+Item* createItem(Base* data, Item* next);
 
 void freeItem(Item* item);
 
