@@ -5,9 +5,12 @@
 #include <string.h>
 #include <assert.h>
 
-#define BASE "Base"
+#include "StringAlgorithm.h"
+
+#define TYPE_NAME_BASE "Base"
 
 struct Base;
+
 typedef void(*Free)(struct Base*);
 typedef void(*BaseF)(struct Base*);
 
@@ -16,16 +19,16 @@ typedef struct Base {
     Free free;
 } Base;
 
-void initializeTypeName(Base*, const char*);
-
-void freeBase(Base* base);
-
-void initializeBase(Base*);
-
-void initializeFree(Base*, Free);
+Base* createBase();
 
 Base* callocBase();
 
-Base* createBase();
+void freeBase(Base* base);
+
+void freeMethodBase(Base* base);
+
+void initializeTypeName(Base* base, const char* typeName);
+
+void initializeFree(Base* base, Free free);
 
 #endif

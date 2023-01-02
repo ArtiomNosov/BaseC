@@ -1,7 +1,9 @@
 #ifndef CONTAINER_H 
 #define CONTAINER_H 
+
 #include "Base.h"
-#define CONTAINER "Container"
+
+#define TYPE_NAME_CONTAINER "Container"
 
 typedef void(*Append)(struct Container*, Base*);
 typedef Base*(*Get)(struct Container*, int);
@@ -18,24 +20,26 @@ typedef struct Container {
     Map map;
 } Container;
 
-void initializeSize(Container*, int);
+void initializeSize(Container* container, int);
 
-void initializeUpperBound(Container*, int);
+void initializeUpperBound(Container* container, int);
 
-void initializeAppend(Container*, Append);
+void initializeAppend(Container* container, Append append);
 
-void initializeGet(Container*, Get);
+void initializeGet(Container* container, Get get);
 
-void initializeResize(Container*, Resize);
+void initializeResize(Container* container, Resize resize);
 
-void initializeMap(Container*, Map);
+void initializeMap(Container* container, Map map);
 
-int getSize(Container*);
+void freeContainer(Container* container);
 
-void incrementSizeAndUpperBound(Container*);
+int getSizeContainer(Container* container);
 
-void decrementSizeAndUpperBound(Container*);
+void incrementSizeAndUpperBoundContainer(Container* container);
 
-void freeContainer(Container*);
+void decrementSizeAndUpperBoundContainer(Container* container);
+
+int normalizeIndex(int size, int index);
 
 #endif

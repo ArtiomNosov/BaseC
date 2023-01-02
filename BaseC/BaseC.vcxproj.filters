@@ -28,6 +28,9 @@
     <Filter Include="Исходные файлы\Int">
       <UniqueIdentifier>{6633fcb4-530f-45f1-aafc-864b40bbc8ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\StringAlgorithm">
+      <UniqueIdentifier>{a926810a-c312-4fac-b13c-16daef1325ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base.c">
@@ -48,6 +51,12 @@
     <ClCompile Include="Int.c">
       <Filter>Исходные файлы\Int</Filter>
     </ClCompile>
+    <ClCompile Include="StringAlgorithm.c">
+      <Filter>Исходные файлы\StringAlgorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.c">
+      <Filter>Исходные файлы\List</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base.h">
@@ -64,6 +73,12 @@
     </ClInclude>
     <ClInclude Include="Int.h">
       <Filter>Исходные файлы\Int</Filter>
+    </ClInclude>
+    <ClInclude Include="StringAlgorithm.h">
+      <Filter>Исходные файлы\StringAlgorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Исходные файлы\List</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

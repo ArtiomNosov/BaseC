@@ -148,14 +148,18 @@
     <ClCompile Include="BaseManualTest.c" />
     <ClCompile Include="Container.c" />
     <ClCompile Include="Int.c" />
+    <ClCompile Include="Item.c" />
     <ClCompile Include="List.c" />
+    <ClCompile Include="StringAlgorithm.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Array.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="Container.h" />
     <ClInclude Include="Int.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="List.h" />
+    <ClInclude Include="StringAlgorithm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

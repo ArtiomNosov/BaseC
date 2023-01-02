@@ -2,7 +2,7 @@
 #define INT_H  
 
 #include "Base.h"
-#define INT "Integer"
+#define TYPE_NAME_INT "Integer"
 
 typedef struct Int {
     Base base;
@@ -10,6 +10,7 @@ typedef struct Int {
 } Int;
 
 void freeInt(Int* integer);
+
 Int* createInt(int integer);
 
 #endif

@@ -1,15 +1,102 @@
 #include "List.h"
 
-Item* callocItem()
+void appendMethodList(List* list, Base* data);
+
+void pushBack(List* list, Base* data);
+
+Base* getMethodList(List* list, int index);
+
+void resizeMethodList(List* list, int newSize);
+
+void mapMethodList(List* list, BaseF baseF);
+
+void freeMethodList(List* list);
+
+int sizeList(List* list);
+
+List* callocList();
+
+void initializeList(List* list);
+
+Container* createContainerList()
 {
-    return (Item*)calloc(1, sizeof(Item));
+    List* result = callocList();
+    initializeList(result);
+    return (Container*)result;
 }
 
-List* callocList() {
+List* callocList() 
+{
     return (List*)calloc(1, sizeof(List));
 }
 
-void mapList(List* list, BaseF baseF)
+void freeList(List* list)
+{
+    freeBase((Base*)list);
+}
+
+void initializeList(List* list)
+{
+    Container* container = (Container*)list;
+    Base* base = (Base*)list;
+    initializeTypeName(base, TYPE_NAME_LIST);
+    initializeFree(base, (Free)freeMethodList);
+    initializeSize(container, 0);
+    initializeUpperBound(container, -1);
+    initializeAppend(container, (Append)appendMethodList);
+    initializeGet(container, (Get)getMethodList);
+    initializeResize(container, (Resize)resizeMethodList);
+    initializeMap(container, (Map)mapMethodList);
+}
+
+void appendMethodList(List* list, Base* data)
+{
+    pushBack(list, data);
+}
+
+void pushBack(List* list, Base* data) {
+    Item* mewItem = createItem();
+
+    mewItem->data = data;
+    mewItem->next = NULL;
+    if (!list->head) {
+        list->head = mewItem;
+        list->tail = mewItem;
+    }
+    else {
+        list->tail->next = mewItem;
+        list->tail = mewItem;
+    }
+    incrementSizeAndUpperBoundContainer((Container*)list);
+}
+
+Base* getMethodList(List* list, int index)
+{
+    Item* item = list->head;
+    Base* res = 0;
+    for (int i = 0; item != NULL && i < index; i++)
+        item = item->next;
+    if (item != NULL)
+        res = item->data;
+    else
+        assert("index out of size");
+    return res;
+}
+
+// TODO: add items free if newSize < oldSize
+void resizeMethodList(List* list, int newSize)
+{
+    assert(list != NULL);
+    int oldSize = sizeList(list);
+    for (int i = 0; i < newSize - oldSize; i++) {
+        Base* base = createBase();
+        pushBack(list, base);
+    }
+    if (newSize > oldSize)
+        initializeSize((Container*)list, newSize);
+}
+
+void mapMethodList(List* list, BaseF baseF)
 {
     Item* ptr = list->head;
     while (ptr) {
@@ -17,32 +104,23 @@ void mapList(List* list, BaseF baseF)
         ptr = ptr->next;
     }
 }
-void freeList(List* list) {
+
+void freeMethodList(List* list) {
     Item* ptr = list->head, * ptr_prev;
+    mapMethodList(list, freeBase);
     while (ptr) {
         ptr_prev = ptr;
         ptr = ptr->next;
-        Base* data = ptr_prev->data;
-        data->free(data);
-        free(ptr_prev);
+        freeItem(ptr_prev);
     }
-    freeBase((Base*)list);
+    freeMethodBase((Base*)list);
 }
 
-void pushBack(List* list, Base* data) {
-    Item* ptr = callocItem();
-
-    ptr->data = data;
-    ptr->next = NULL;
-    if (!list->head) {
-        list->head = ptr;
-        list->tail = ptr;
-    }
-    else {
-        list->tail->next = ptr;
-        list->tail = ptr;
-    }
-    incrementSizeAndUpperBound((Container*)list);
+// TODO: transform to sizeMethodList
+int sizeList(List* list)
+{
+    assert(list != NULL);
+    return ((Container*)list)->size;
 }
 
 // TODO: use somewhere
@@ -64,8 +142,8 @@ void remove(List* list, Base* data) {
     if (ptr_prev) {
         ptr_prev->next = ptr->next;
     }
-    free(ptr);
-    decrementSizeAndUpperBound((Container*)list);
+    freeItem(ptr);
+    decrementSizeAndUpperBoundContainer((Container*)list);
 }
 
 // TODO: use somewhere
@@ -77,11 +155,11 @@ Base* popFront(List* list)
     Base* res = list->head->data;
     remove(list, res);
 
-    decrementSizeAndUpperBound((Container*)list);
+    decrementSizeAndUpperBoundContainer((Container*)list);
     return res;
 }
 
-// TODO: use somewhere
+// TODO: use somewhere, setMethodList
 int setValueInList(List* list, int index, Base* data)
 {
     Item* ptr = list->head;
@@ -92,56 +170,4 @@ int setValueInList(List* list, int index, Base* data)
     else
         return 1;
     return 0;
-}
-
-Base* getValueFromList(List* list, int index)
-{
-    Item* ptr = list->head;
-    Base* res = 0;
-    for (int i = 0; ptr != NULL && i < index; i++)
-        ptr = ptr->next;
-    if (ptr != NULL)
-        res = ptr->data;
-    else
-        assert("index out of size");
-    return res;
-}
-
-
-int sizeList(List* list)
-{
-    assert(list != NULL);
-    return ((Container*)list)->size;
-}
-
-void resizeList(List* list, int newSize)
-{
-    assert(list != NULL);
-    int oldSize = sizeList(list);
-    for (int i = 0; i < newSize - oldSize; i++) {
-        Base* base = createBase();
-        pushBack(list, base);
-    }
-    initializeSize((Container*)list, newSize);
-}
-
-void initializeList(List* list)
-{
-    Container* container = (Container*)list;
-    Base* base = (Base*)list;
-    initializeTypeName(base, LIST);
-    initializeSize(container, 0);
-    initializeUpperBound(container, -1);
-    initializeAppend(container, (Append)pushBack);
-    initializeGet(container, (Get)getValueFromList);
-    initializeResize(container, (Resize)resizeList);
-    initializeMap(container, (Map)mapList);
-    initializeFree(base, (Free)freeList);
-}
-
-Container* createContainerList()
-{
-    List* result = callocList();
-    initializeList(result);
-    return (Container*)result;
 }

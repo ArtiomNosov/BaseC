@@ -2,12 +2,9 @@
 #define LIST_H  
 
 #include "Container.h"
-#define LIST "List"
+#include "Item.h"
 
-typedef struct Item {
-    Base* data;
-    struct Item* next;
-} Item;
+#define TYPE_NAME_LIST "List"
 
 typedef struct List {
     Container container;

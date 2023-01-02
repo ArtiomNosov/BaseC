@@ -15,7 +15,7 @@ Int* createInt(int integer)
 	Int* result = (Int*)calloc(1, sizeof(Int));
 	initializeDataInInteger(result, integer);
 	Base* base = (Base*)result;
-	initializeTypeName(base, INT);
-	initializeFree(base, (Free)freeInt);
+	initializeTypeName(base, TYPE_NAME_INT);
+	initializeFree(base, (Free)freeMethodBase);
 	return result;
 }

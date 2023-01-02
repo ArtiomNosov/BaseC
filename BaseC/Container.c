@@ -20,11 +20,6 @@ void initializeGet(Container* container, Get get)
 	container->get = get;
 }
 
-int getSize(Container* container)
-{
-	return container->size;
-}
-
 void initializeResize(Container* container, Resize resize)
 {
 	container->resize = resize;
@@ -35,20 +30,32 @@ void initializeMap(Container* container, Map map)
 	container->map = map;
 }
 
-void incrementSizeAndUpperBound(Container* container)
+void freeContainer(Container* container)
+{
+	freeBase((Base*)container);
+}
+
+int getSizeContainer(Container* container)
+{
+	return container->size;
+}
+
+void incrementSizeAndUpperBoundContainer(Container* container)
 {
 	container->size++;
 	container->upperBound++;
 }
 
-void decrementSizeAndUpperBound(Container* container)
+void decrementSizeAndUpperBoundContainer(Container* container)
 {
 	container->size--;
 	container->upperBound--;
 }
 
-void freeContainer(Container* container)
+int normalizeIndex(int size, int index)
 {
-	Base* base = (Base*)container;
-	base->free(base);
+	int result = max(0, index);
+	int upperBound = size - 1;
+	result = min(upperBound, index);
+	return result;
 }

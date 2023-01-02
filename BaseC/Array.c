@@ -1,26 +1,70 @@
 #include "Array.h"
 
-int normalizeIndex(Array* array, int i)
+Array* callocArray();
+
+void initializeArray(Array* array);
+
+void initializeRealSize(Array* array, int realSize);
+
+void appendMethodArray(Array* array, Base* value);
+
+Base* getMethodArray(Array* array, int i);
+
+void resizeMethodArray(Array* array, int newSize);
+
+void mapMethodArray(Array* array, BaseF baseF);
+
+void mapFromToArray(Array* array, BaseF baseF, int from, int to);
+
+void freeMethodArray(Array* array);
+
+void freeDataInArray(Array* array);
+
+void freeDataOfArrayFromTo(Array* array, int from, int to);
+
+int getSizeArray(Array* array);
+
+int getUpperBoundArray(Array* array);
+
+Container* createContainerArray()
 {
-    int result = max(0, i);
-    int size = getSize((Container*)array);
-    int upperBound = size - 1;
-    result = min(upperBound, i);
-    return result;
+    Array* result = callocArray();
+    initializeArray(result);
+    return (Container*)result;
 }
 
-Base* get(Array* array, int i)
+Array* callocArray()
 {
-    i = normalizeIndex(array, i);
-    return array->data[i];
+    return calloc(1, sizeof(Array));
 }
 
-int getSizeArray(Array* array)
+void freeArray(Array* array)
 {
-    return getSize((Container*)array);
+    freeBase((Base*)array);
 }
 
-void append(Array* array, Base* value)
+void initializeArray(Array* array)
+{
+    Container* container = (Container*)array;
+    Base* base = (Base*)array;
+    initializeTypeName(base, TYPE_NAME_ARRAY);
+    initializeSize(container, 0);
+    initializeUpperBound(container, -1);
+    initializeAppend(container, (Append)appendMethodArray);
+    initializeGet(container, (Get)getMethodArray);
+    initializeResize(container, (Resize)resizeMethodArray);
+    initializeMap(container, (Map)mapMethodArray);
+    initializeFree(base, (Free)freeMethodArray);
+    initializeRealSize(array, START_SIZE);
+}
+
+void initializeRealSize(Array* array, int realSize)
+{
+    array->realSize = realSize;
+    array->data = calloc(array->realSize, sizeof(Base*));
+}
+
+void appendMethodArray(Array* array, Base* value)
 {
     Container* container = (Container*)array;
     int size = getSizeArray(array);
@@ -29,45 +73,17 @@ void append(Array* array, Base* value)
         container->resize(container, nextSize);
     }
     array->data[size] = value;
-    incrementSizeAndUpperBound(container);
+    incrementSizeAndUpperBoundContainer(container);
 }
 
-void mapFromTo(Array* array, BaseF baseF, int from, int to)
+Base* getMethodArray(Array* array, int i)
 {
-    from = normalizeIndex(array, from);
-    to = normalizeIndex(array, to);
-    int minIndex = min(from, to);
-    to = max(from, to);
-    for (int i = minIndex; i <= to; i++) {
-        Base* currentValue = array->data[i];
-        baseF(currentValue);
-    }
+    int size = getSizeArray(array);
+    i = normalizeIndex(size, i);
+    return array->data[i];
 }
 
-int getUpperBound(Array* array)
-{
-    Container* container = (Container*)array;
-    return container->upperBound;
-}
-
-void map(Array* array, BaseF baseF)
-{
-    int upperBound = getUpperBound(array);
-    mapFromTo(array, baseF, 0, upperBound);
-}
-
-void freeDataFromTo(Array* array, int from, int to)
-{
-    mapFromTo(array, freeBase, from, to);
-}
-
-void freeDataInArray(Array* array)
-{
-    int upperBound = getUpperBound(array);
-    freeDataFromTo(array, 0, upperBound);
-}
-
-void resize(Array* array, int newSize)
+void resizeMethodArray(Array* array, int newSize)
 {
     if (newSize <= 0) {
         freeDataInArray(array);
@@ -77,7 +93,7 @@ void resize(Array* array, int newSize)
     int upperBound = size - 1;
     int newRealSize = newSize * SIZE_TO_REAL_SIZE;
     if (newSize < size) {
-        freeDataFromTo(array, newSize, upperBound);
+        freeDataOfArrayFromTo(array, newSize, upperBound);
         initializeSize((Container*)array, newSize);
         return;
     }
@@ -91,42 +107,49 @@ void resize(Array* array, int newSize)
     array->realSize = newRealSize;
 }
 
-void freeArray(Array* array)
+void mapMethodArray(Array* array, BaseF baseF)
+{
+    int upperBound = getUpperBoundArray(array);
+    mapFromToArray(array, baseF, 0, upperBound);
+}
+
+void mapFromToArray(Array* array, BaseF baseF, int from, int to)
+{
+    int size = getSizeArray(array);
+    from = normalizeIndex(size, from);
+    to = normalizeIndex(size, to);
+    int minIndex = min(from, to);
+    to = max(from, to);
+    for (int i = minIndex; i <= to; i++) {
+        Base* currentValue = array->data[i];
+        baseF(currentValue);
+    }
+}
+
+void freeMethodArray(Array* array)
 {
     freeDataInArray(array);
     free(array->data);
-    freeBase((Base*)array);
+    freeMethodBase((Base*)array);
 }
 
-void initializeRealSize(Array* array, int realSize)
+void freeDataInArray(Array* array)
 {
-    array->realSize = realSize;
-    array->data = calloc(array->realSize, sizeof(Base*));
+    int upperBound = getUpperBoundArray(array);
+    freeDataOfArrayFromTo(array, 0, upperBound);
 }
 
-void initializeArray(Array* array)
+void freeDataOfArrayFromTo(Array* array, int from, int to)
 {
-    Container* container = (Container*)array;
-    Base* base = (Base*)array;
-    initializeTypeName(base, ARRAY);
-    initializeSize(container, 0);
-    initializeUpperBound(container, -1);
-    initializeAppend(container, (Append)append);
-    initializeGet(container, (Get)get);
-    initializeResize(container, (Resize)resize);
-    initializeMap(container, (Map)map);
-    initializeFree(base, (Free)freeArray);
-    initializeRealSize(array, START_SIZE);
+    mapFromToArray(array, freeMethodBase, from, to);
 }
 
-Array* callocArray()
+int getSizeArray(Array* array)
 {
-    return calloc(1, sizeof(Array));
+    return getSizeContainer((Container*)array);
 }
 
-Container* createContainerArray()
+int getUpperBoundArray(Array* array)
 {
-    Array* result = callocArray();
-    initializeArray(result);
-    return (Container*)result;
+    return ((Container*)array)->upperBound;
 }

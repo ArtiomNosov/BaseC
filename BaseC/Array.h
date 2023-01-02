@@ -2,7 +2,8 @@
 #define ARRAY_H  
 
 #include "Container.h"
-#define ARRAY "Array"
+
+#define TYPE_NAME_ARRAY "Array"
 #define START_SIZE 2
 #define SIZE_TO_REAL_SIZE 2
 
@@ -12,12 +13,8 @@ typedef struct Array {
     int realSize;
 } Array;
 
-void initializeArray(Array*);
-
-void initializeRealSizeAndData(Array*);
-
-Array* callocArray();
-
 Container* createContainerArray();
+
+void freeArray(Array* array);
 
 #endif
