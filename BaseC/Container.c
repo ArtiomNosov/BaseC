@@ -64,8 +64,8 @@ void decrementSizeAndUpperBoundContainer(Container* container)
 
 int normalizeIndex(int size, int index)
 {
-	int result = max(0, index);
+	int result = MAX(0, index);
 	int upperBound = size - 1;
-	result = min(upperBound, index);
+	result = MIN(upperBound, index);
 	return result;
 }

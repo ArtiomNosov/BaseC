@@ -49,7 +49,7 @@ Container* createContainerArray()
 
 Array* callocArray()
 {
-    return calloc(1, sizeof(Array));
+    return (Array*)calloc(1, sizeof(Array));
 }
 
 void freeArray(Array* array)
@@ -64,7 +64,7 @@ void initializeArray(Array* array)
     initializeTypeName(base, TYPE_NAME_ARRAY);
     initializeFree(base, (Free)freeMethodArray);
     initializeCopy(base, (Copy)copyMethodArray);
-    initializeToString(base, (ToString)toStringMethodArray);
+    initializeToString(base, (_ToString)toStringMethodArray);
     initializeDump(base, (Dump)dumpMethodArray);
     initializeSize(container, 0);
     initializeUpperBound(container, -1);
@@ -80,7 +80,7 @@ void initializeArray(Array* array)
 void initializeRealSize(Array* array, int realSize)
 {
     array->realSize = realSize;
-    array->data = calloc(array->realSize, sizeof(Base*));
+    array->data = (Base**)calloc(array->realSize, sizeof(Base*));
 }
 
 void freeMethodArray(Array* array)
@@ -158,7 +158,7 @@ void resizeMethodArray(Array* array, int newSize)
     else if (newSize == size) {
         return;
     }
-    Base** newData = calloc(newRealSize, sizeof(Base*));
+    Base** newData = (Base**)calloc(newRealSize, sizeof(Base*));
     memcpy(newData, array->data, sizeof(Base*) * size);
     free(array->data);
     array->data = newData;
@@ -176,8 +176,8 @@ void mapFromToArray(Array* array, BaseF baseF, int from, int to)
     int size = getSizeArray(array);
     from = normalizeIndex(size, from);
     to = normalizeIndex(size, to);
-    int minIndex = min(from, to);
-    to = max(from, to);
+    int minIndex = MIN(from, to);
+    to = MAX(from, to);
     for (int i = minIndex; i <= to; i++) {
         Base* currentValue = array->data[i];
         baseF(currentValue);

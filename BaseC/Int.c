@@ -29,7 +29,7 @@ void initializeInt(Int* integer)
 	initializeTypeName(base, TYPE_NAME_INT);
 	initializeFree(base, (Free)freeMethodBase);
 	initializeCopy(base, (Copy)copyMethodInt);
-	initializeToString(base, (ToString)toStringMethodInt);
+	initializeToString(base, (_ToString)toStringMethodInt);
 	initializeDump(base, (Dump)dumpMethodInt);
 }
 

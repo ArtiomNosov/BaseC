@@ -39,9 +39,6 @@
     <ClCompile Include="Array.c">
       <Filter>Исходные файлы\Array</Filter>
     </ClCompile>
-    <ClCompile Include="BaseManualTest.c">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Container.c">
       <Filter>Исходные файлы\Container</Filter>
     </ClCompile>
@@ -56,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="Item.c">
       <Filter>Исходные файлы\List</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseManualTest.c">
+      <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

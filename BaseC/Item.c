@@ -19,7 +19,7 @@ Item* createItem(Base* data, Item* next)
     initializeTypeName(base, TYPE_NAME_ITEM);
     initializeFree(base, freeMethodBase);
     initializeCopy(base, (Copy)copyMethodItem);
-    initializeToString(base, (ToString)toStringMethodItem);
+    initializeToString(base, (_ToString)toStringMethodItem);
     initializeDump(base, (Dump)dumpMethodItem);
     initializeDataInItem(result, data);
     initializeNextInItem(result, next);

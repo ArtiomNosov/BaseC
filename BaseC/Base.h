@@ -11,19 +11,22 @@
 #define TRUE 1
 #define FALSE 0
 
+#define MIN(a,b) (a < b ? a : b) 
+#define MAX(a,b) (a > b ? a : b)
+
 struct Base;
 
 typedef void(*Free)(struct Base*);
 typedef void(*BaseF)(struct Base*);
 typedef struct Base*(*Copy)(struct Base*);
-typedef char*(*ToString)(struct Base*);
-typedef ToString Dump;
+typedef char*(*_ToString)(struct Base*);
+typedef char* (*Dump)(struct Base*);
 
 typedef struct Base {
     char* typeName;
     Free free;
     Copy copy;
-    ToString toString;
+    _ToString toString;
     Dump dump;
 } Base;
 
@@ -51,7 +54,7 @@ void initializeFree(Base* base, Free free);
 
 void initializeCopy(Base* base, Copy copy);
 
-void initializeToString(Base* base, ToString toString);
+void initializeToString(Base* base, _ToString toString);
 
 void initializeDump(Base* base, Dump dump);
 

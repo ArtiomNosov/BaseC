@@ -11,7 +11,7 @@ Base* createBase()
 
 Base* callocBase()
 {
-    return calloc(1, sizeof(Base));
+    return (Base*)calloc(1, sizeof(Base));
 }
 
 void freeBase(Base* base)
@@ -50,7 +50,7 @@ char* toStringMethodBase(Base* base)
     char* typeName = base->typeName;
     size_t typeNameLenght = strlen(typeName);
     size_t typeNameLenghtWithEnd = typeNameLenght + 1;
-    return createCopyOfString(typeName, typeNameLenghtWithEnd);
+    return createCopyOfString(typeName);
 }
 
 char* dumpMethodBase(Base* base)
@@ -71,7 +71,7 @@ void initializeTypeName(Base* base, const char* typeName)
 {
     size_t typeNameLenght = strlen(typeName);
     size_t typeNameLenghtWithEnd = typeNameLenght + 1;
-    base->typeName = createCopyOfString(typeName, typeNameLenghtWithEnd);
+    base->typeName = createCopyOfString(typeName);
 }
 
 void initializeFree(Base* base, Free free)
@@ -84,7 +84,7 @@ void initializeCopy(Base* base, Copy copy)
     base->copy = copy;
 }
 
-void initializeToString(Base* base, ToString toString)
+void initializeToString(Base* base, _ToString toString)
 {
     base->toString = toString;
 }

@@ -68,7 +68,7 @@ char* dumpMethodList(List* list)
     char* result = toStringMethodList(list);
     Item* ptr = list->head;
     while (ptr) {
-        char* itemDump = dumpBase(ptr);
+        char* itemDump = dumpBase((Base*)ptr);
         char* oldResult = result;
         result = concatenateStringsWithSeparator(result, itemDump, SEPARATOR);
         free(oldResult);
@@ -85,7 +85,7 @@ void initializeList(List* list)
     initializeTypeName(base, TYPE_NAME_LIST);
     initializeFree(base, (Free)freeMethodList);
     initializeCopy(base, (Copy)copyMethodList);
-    initializeToString(base, (ToString)toStringMethodList);
+    initializeToString(base, (_ToString)toStringMethodList);
     initializeDump(base, (Dump)dumpMethodList);
     initializeSize(container, 0);
     initializeUpperBound(container, -1);
@@ -105,17 +105,18 @@ void appendMethodList(List* list, Base* data)
 void pushBack(List* list, Base* data) {
     Item* mewItem = createItem(data, NULL);
 
-    if (!list->head) {
-        list->head = mewItem;
+    if (list->head) {
+        list->tail->next = mewItem;
         list->tail = mewItem;
     }
     else {
-        list->tail->next = mewItem;
+        list->head = mewItem;
         list->tail = mewItem;
     }
     incrementSizeAndUpperBoundContainer((Container*)list);
 }
 
+// TODO: refactor
 Base* getMethodList(List* list, int index)
 {
     Item* item = list->head;
