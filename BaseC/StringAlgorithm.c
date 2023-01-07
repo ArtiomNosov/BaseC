@@ -45,3 +45,18 @@ char* concatenateStringsWithSeparator(char* stringOne, char* stringTwo, const ch
     copyMemory(result + sizeOne + sizeThree, stringTwo, sizeTwo);
     return result;
 }
+
+int stringCompareToIndex(const char* stringOne, const char* stringTwo, size_t index)
+{
+    size_t stringOneLenght = strlen(stringOne);
+    size_t stringTwoLenght = strlen(stringTwo);
+
+    if (index >= stringOneLenght || index >= stringTwoLenght)
+        return 0;
+
+    for (size_t i = 0; i <= index; i++)
+        if (stringOne[i] != stringTwo[i])
+            return 0;
+
+    return 1;
+}

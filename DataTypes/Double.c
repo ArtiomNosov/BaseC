@@ -18,6 +18,21 @@ Double* createDouble(double data)
 	return result;
 }
 
+Double* copyDouble(Double* real)
+{
+	return (Double*)copyBase((Base*)real);
+}
+
+char* toStringDouble(Double* real)
+{
+	return toStringBase((Base*)real);
+}
+
+char* dumpDouble(Double* real)
+{
+	return dumpBase((Base*)real);
+}
+
 void freeDouble(Double* real)
 {
 	freeBase((Base*)real);
@@ -51,7 +66,7 @@ char* toStringMethodDouble(Double* real)
 char* dumpMethodDouble(Double* real)
 {
 	char buffer[BUFFER_SIZE] = { 0 };
-	char* typeName = toStringMethodInt(real);
+	char* typeName = toStringMethodDouble(real);
 	sprintf(buffer, "%f", real->data);
 	char* data = createCopyOfString(buffer);
 	char* result = concatenateStringsWithSeparator(typeName, data, SEPARATOR);
