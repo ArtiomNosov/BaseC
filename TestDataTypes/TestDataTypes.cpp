@@ -6,6 +6,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 #include <string>
 
 #include "Complex.c"
+#include "String.c"
 
 namespace TestDataTypes
 {
@@ -141,6 +142,88 @@ namespace TestDataTypes
 			Assert::IsTrue(stringCompareToIndex(actual, expect.c_str(), minUpperBound));
 
 			free(actual);
+		}
+	};
+
+	TEST_CLASS(TestString)
+	{
+	public:
+		char* loadCharPointerStirng(const char* path)
+		{
+			return createCopyOfString("1.5 2.4");
+		}
+		char* data;
+		String* var;
+		TestString()
+		{
+			data = loadCharPointerStirng(PATH_LOAD);
+			var = createString(data);
+		}
+		~TestString()
+		{
+			freeString(var);
+			free(data);
+		}
+		TEST_METHOD(TestCreateString)
+		{
+			Assert::IsTrue(var != NULL);
+
+			Assert::IsTrue(strcmp(data, toCString(var)) == 0);
+		}
+		TEST_METHOD(TestCopyString)
+		{
+			String* var2 = copyString(var);
+
+			Assert::IsTrue(strcmp(toCString(var), toCString(var2)) == 0);
+			freeString(var2);
+		}
+		TEST_METHOD(TestToStringTypeString)
+		{
+			char* actual = toStringTypeString(var);
+
+			Assert::IsTrue(strcmp(actual, TYPE_NAME_STRING) == 0);
+
+			free(actual);
+		}
+		TEST_METHOD(TestDumpMethodString)
+		{
+			char* actual = dumpString(var);
+			std::string expect = std::string(TYPE_NAME_STRING) + " ";
+			expect += std::string(data);
+
+			Logger::WriteMessage(actual);
+			Logger::WriteMessage("\n");
+			Logger::WriteMessage(expect.c_str());
+			Logger::WriteMessage("\n");
+
+			Assert::IsTrue(strcmp(actual, expect.c_str()) == 0);
+
+			free(actual);
+		}
+		TEST_METHOD(TestSizeMethodString)
+		{
+			Assert::IsTrue(sizeString(var) == strlen(toCString(var)));
+		}
+		TEST_METHOD(TestAppendMethodString)
+		{
+			String* var2 = copyString(var);
+			appendString(var2, var);
+			
+			std::string expect = std::string(data) + std::string(data);
+
+			Assert::IsTrue(strcmp(expect.c_str(), toCString(var2)) == 0);
+
+			freeString(var2);
+		}
+		TEST_METHOD(TestSizeMethodStringIfAppend)
+		{
+			String* var2 = copyString(var);
+			appendString(var2, var);
+			std::string expect = std::string(data) + std::string(data);
+
+			Assert::IsTrue(expect.size() == sizeString(var2));
+
+			freeString(var2);
 		}
 	};
 }

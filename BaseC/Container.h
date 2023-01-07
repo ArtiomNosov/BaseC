@@ -11,6 +11,7 @@ typedef void(*Resize)(struct Container*, int);
 typedef void(*Map)(struct Container*, BaseF);
 typedef void (*Where)(struct Container*, int (*) (Base*), BaseF); 
 typedef void (*Concat)(struct Container*, struct Container*);
+typedef size_t(*Size)(Base*);
 
 typedef struct Container {
     Base base;
