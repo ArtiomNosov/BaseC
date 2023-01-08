@@ -51,4 +51,8 @@ void decrementSizeAndUpperBoundContainer(Container* container);
 
 int normalizeIndex(int size, int index);
 
+char* dumpContainer(Container* container);
+
+Container* copyContainer(Container* container);
+
 #endif

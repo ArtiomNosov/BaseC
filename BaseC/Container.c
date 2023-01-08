@@ -69,3 +69,23 @@ int normalizeIndex(int size, int index)
 	result = MIN(upperBound, index);
 	return result;
 }
+
+char* dumpContainer(Container* container)
+{
+	return dumpBase((Base*)container);
+}
+
+Base* get(Container* container, int position)
+{
+	return container->get(container, position);
+}
+
+void append(Container* container, Base* value)
+{
+	container->append(container, value);
+}
+
+Container* copyContainer(Container* container)
+{
+	return (Container*)copyBase((Base*)container);
+}

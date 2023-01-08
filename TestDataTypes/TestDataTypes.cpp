@@ -5,13 +5,39 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 #include <string>
 
+#include "StringAlgorithm.h"
+#include "Base.h"
+#include "Complex.h"
+#include "String.h"
+#include "Container.h"
+#include "Array.h"
+#include "Function.h"
+
+#include "StringAlgorithm.c"
+#include "Base.c"
 #include "Complex.c"
 #include "String.c"
+#include "Container.c"
+#include "Array.c"
+#include "Function.c"
 
 namespace TestDataTypes
 {
 	#define PATH_LOAD ""
 
+	Container* sumDouble(Container* argument)
+	{
+		Container* results = createContainerArray();
+		Double* doubleResult = createDouble(0.0);
+		size_t size = argument->size;
+		for (size_t i = 0; i < size; i++)
+		{
+			Double* currentDouble = (Double*)get(argument, i);
+			doubleResult->data += currentDouble->data;
+		}
+		append(results, (Base*)doubleResult);
+		return results;
+	}
 
 	TEST_CLASS(TestDouble)
 	{
@@ -224,6 +250,94 @@ namespace TestDataTypes
 			Assert::IsTrue(expect.size() == sizeString(var2));
 
 			freeString(var2);
+		}
+	};
+	
+	TEST_CLASS(TestFunction)
+	{
+	public:
+		// TODO: add deserialize to Function type
+		Container* arguments = NULL;
+		Function* var = NULL;
+		Container* results = NULL;
+		double tolerance = 0.000001;
+		TestFunction()
+		{
+			arguments = createContainerArray();
+			results = createContainerArray();
+			Base* doubleResult = (Base*)createDouble(0.0);
+			append(results, doubleResult);
+			Base* doubleArgumentFirst = (Base*)createDouble(0.0);
+			Base* doubleArgumentSecond = (Base*)createDouble(0.0);
+			Base* doubleArgumentThird = (Base*)createDouble(0.0);
+			append(arguments, doubleArgumentFirst);
+			append(arguments, doubleArgumentSecond);
+			append(arguments, doubleArgumentThird);
+			var = createFunction(results, sumDouble, arguments);
+		}
+		~TestFunction()
+		{
+			freeFunction(var);
+		}
+		TEST_METHOD(TestCreateFunction)
+		{
+			Assert::IsTrue(var != NULL);
+			Assert::AreEqual((size_t)var->resultTypes, (size_t)results);
+			Assert::AreEqual((size_t)var->argumentTypes, (size_t)arguments);
+			Assert::AreEqual((size_t)var->functionPointer, (size_t)sumDouble);
+		}
+		TEST_METHOD(TestCopyFunction)
+		{
+			Function* var2 = copyFunction(var);
+
+			Assert::IsTrue(var->resultTypes != var2->resultTypes);
+			Assert::IsTrue(var->argumentTypes != var2->argumentTypes);
+
+			freeFunction(var2);
+		}
+		TEST_METHOD(TestToStringMethodFunction)
+		{
+			char* actual = toStringFunction(var);
+
+			Assert::IsTrue(strcmp(actual, TYPE_NAME_FUNCTION) == 0);
+
+			free(actual);
+		}
+		TEST_METHOD(TestDumpMethodFunction)
+		{
+			char* actual = dumpFunction(var);
+			std::string expect = std::string(TYPE_NAME_FUNCTION) + " ";
+			expect += std::string(ARGUMENT_FUNCTION) + " ";
+			expect += std::string(dumpContainer(var->argumentTypes)) + " ";
+			expect += std::string(RESULT_FUNCTION) + " ";
+			expect += std::string(dumpContainer(var->resultTypes));
+
+			Logger::WriteMessage(expect.c_str());
+			Logger::WriteMessage("\n");
+			Logger::WriteMessage(actual);
+			Assert::IsTrue(strcmp(expect.c_str(), actual) == 0);
+
+			free(actual);
+		}
+		TEST_METHOD(TestCallFunction)
+		{
+			Container* argumentForSum = createContainerArray();
+			Base* doubleArgumentFirst = (Base*)createDouble(1.0);
+			Base* doubleArgumentSecond = (Base*)createDouble(2.0);
+			Base* doubleArgumentThird = (Base*)createDouble(3.0);
+			append(argumentForSum, doubleArgumentFirst);
+			append(argumentForSum, doubleArgumentSecond);
+			append(argumentForSum, doubleArgumentThird);
+
+			Container* resultOfSum = callFunction(var, argumentForSum);
+			Assert::AreEqual(((Double*)get(resultOfSum, 0))->data, 6.0, tolerance);
+
+			char* resultDump = dumpContainer(resultOfSum);
+			Logger::WriteMessage(resultDump);
+			free(resultDump);
+
+			freeContainer(argumentForSum);
+			freeContainer(resultOfSum);
 		}
 	};
 }

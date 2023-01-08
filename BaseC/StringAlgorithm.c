@@ -60,3 +60,19 @@ int stringCompareToIndex(const char* stringOne, const char* stringTwo, size_t in
 
     return 1;
 }
+
+// Delete argument string and return concatinate of two argument strings with sep between them
+char* appendStringsWithSeparator(char* stringForDelete, char* stringTwo, const char* separator)
+{
+    char* result = concatenateStringsWithSeparator(stringForDelete, stringTwo, separator);
+    free(stringForDelete);
+    return result;
+}
+
+// Delete argument string and return concatinate of two argument strings
+char* appendStrings(char* stringForDelete, char* stringTwo)
+{
+    char* result = concatenateStrings(stringForDelete, stringTwo);
+    free(stringForDelete);
+    return result;
+}

@@ -3,8 +3,8 @@
 
 #include "stdio.h"
 
-#include "StringAlgorithm.c"
-#include "Base.c"
+#include "StringAlgorithm.h"
+#include "Base.h"
 
 #define TYPE_NAME_DOUBLE "Double"
 

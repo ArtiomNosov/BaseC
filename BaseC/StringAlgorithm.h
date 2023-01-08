@@ -18,4 +18,8 @@ char* concatenateStrings(char* stringOne, char* stringTwo);
 
 char* concatenateStringsWithSeparator(char* stringOne, char* stringTwo, const char* separator);
 
+char* appendStringsWithSeparator(char* stringForDelete, char* stringTwo, const char* separator);
+
+char* appendStrings(char* stringForDelete, char* stringTwo);
+
 #endif
