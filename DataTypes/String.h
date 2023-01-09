@@ -2,6 +2,7 @@
 #define STRING_H  
 
 #include "Base.h"
+#include "Char.h"
 #include "Container.h"
 #include "StringAlgorithm.h"
 
@@ -13,7 +14,7 @@
 
 typedef struct String {
     Base base;
-    char* data;
+    Char* data;
     int update;
     Size size;
     Append append;
@@ -21,6 +22,8 @@ typedef struct String {
 
 void freeString(String* str);
 
-String* createString(char* data);
+String* createStringFromCString(char* data);
+
+void appendString(String* destination, String* source);
 
 #endif

@@ -1,47 +1,14 @@
 #include "String.h"
 
-String* callocString();
-
-String* createString(char* data);
-
-void freeString(String* str);
-
-void initializeUpdateString(String* str);
-
-void updateString(String* str);
-
-void initializeString(String* str);
-
-void initializeDataInString(String* str, char* data);
-
-void freeMethodString(String* str);
-
-String* copyMethodString(String* str);
-
-char* toCString(String* str);
-
-char* dumpMethodString(String* str);
-
-int isUpdate(String* str);
-
-size_t sizeMethodString(String* str);
-
-void appendMethodString(String* strOne, String* strTwo);
-
-void initializeSizeInString(String* str, Size size);
-
-void initializeAppendInString(String* str, Append append);
-
 String* callocString()
 {
 	return (String*)calloc(1, sizeof(String));
 }
 
-String* createString(char* data)
+String* createStringcreateStringFromCString(char* data)
 {
 	String* result = callocString();
-	initializeString(result);
-	initializeDataInString(result, data);
+	initializeStringFromCString(result, data);
 	return result;
 }
 
@@ -60,7 +27,7 @@ void updateString(String* str)
 	initializeUpdateString(str);
 }
 
-void initializeString(String* str)
+void initializeBaseString(String* str)
 {
 	Base* base = (Base*)str;
 	initializeTypeName(base, TYPE_NAME_STRING);
@@ -75,7 +42,13 @@ void initializeString(String* str)
 
 void initializeDataInString(String* str, char* data)
 {
-	str->data = createCopyOfString(data);
+	str->data = createCharStringFromCString(data);
+}
+
+void initializeStringFromCString(String* str, char* data)
+{
+	initializeBaseString(str);
+	initializeDataInString(str, data)
 }
 
 void freeMethodString(String* str)
